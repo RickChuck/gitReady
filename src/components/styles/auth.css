@@ -1,0 +1,27 @@
+.Auth {
+    text-align: center;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    
+}
+p {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    font-size: 24px;
+    
+}
+button {
+    margin: 5px;
+    border: none;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.609);
+    color: white;
+    font-size: 15px;
+}
+
+input {
+    font-size: 15px;
+}
