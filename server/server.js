@@ -1,9 +1,9 @@
 require('dotenv').config();
-const bcrypt = require('bcrypt');
 const express = require('express');
 const session = require('express-session');
 const app = express();
 const massive = require('massive');
+const auth = require('./controller/auth_ctrl')
 
 app.use(express.json());
 
@@ -20,37 +20,28 @@ massive(CONNECTION_STRING).then(db => {
     console.log('db connected')
 })
 
-app.post('/auth/signup', async (req, res) => {
-    let { user_name, hash_value} = req.body;
-    let db = req.app.get('db')
-    let userFound = await db.user_check([user_name]);
-    console.log(userFound)
-    if (userFound[0]) {
-        return res.status(400).send('Username already exits');
-    }
-    let salt = bcrypt.genSaltSync(10)
-    let hash = bcrypt.hashSync(hash_value, salt);
-    let createdUser = await db.create_user([user_name, hash])
-    req.session.user = { id: createdUser[0].id, user_name: createdUser[0].user_name };
-    res.status(200).send(req.session.user);
+//Auth endpoints
+app.post('/auth/signup', auth.signup)
+app.post('/auth/login', auth.login)
+app.post('/auth/logout', async (req, res) => {
+    await req.session.destroy();
+    res.sendStatus(200);
 })
 
-app.post('/auth/login', async (req, res) => {
-    let { user_name, hash_value } = req.body;
+//Blog Post endpoints
+app.post('/api/addPost', async (req, res) => {
+    let {post} = req.body
     let db = req.app.get('db')
-    let userFound = await db.user_check([user_name])
-    console.log(userFound)
-    if(!userFound[0]) {
-        return res.status(400).send('No username found')
-    }
-    let result = bcrypt.compareSync(hash_value, userFound[0].hash_value)
-    if (result) {
-        req.session.user = {id: userFound[0].id, user_name: userFound[0].user_name}
-        console.log(req.session.user);
-        res.status(200).send(req.session.user)
-    } else {
-        return res.status(401).send('Incorrect username or password')
-    }
+    let user_id = req.session.user
+    let createdPost = await db.create_post([post, user_id])
+    res.status(200).send(createdPost);
+})
+
+app.get('/api/getPost', async (req, res) => {
+    let db = req.app.get('db')
+    let {post} = req.body
+    let allPosts = await db.get_post([post])
+    res.status(200).send(allPosts)
 })
 
 app.listen(SERVER_PORT, () => {
