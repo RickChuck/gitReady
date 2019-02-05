@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
 import axios from 'axios';
 import '../styles/auth.css'
 
 class Auth extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             user_name: '',
             hash_value: '',
@@ -30,6 +30,7 @@ class Auth extends Component {
     }
 
     render(){
+        // console.log(this.state.loggedInUser);        
         return(
             <div className='Auth'>
                 <div>

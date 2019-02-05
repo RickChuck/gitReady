@@ -17,8 +17,8 @@ button {
     margin: 5px;
     border: none;
     display: inline-block;
-    background-color: rgba(0, 0, 0, 0.609);
-    color: white;
+    background-color: rgb(29, 73, 109);
+    color: rgb(196, 127, 0);
     font-size: 15px;
 }
 

@@ -1,6 +1,5 @@
--- SELECT *
--- FROM blog_posts
--- ORDER BY id DESC;
+DELETE FROM blog_posts
+WHERE id = $1;
 
 SELECT *
 FROM blog_posts
