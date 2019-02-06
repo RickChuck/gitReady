@@ -12,15 +12,9 @@ class Dashboard extends Component {
             blogInput: ''
         }
 
-        // const movieRows = []
-        // movies.forEach((movie) => {
-        //     const movieRow = <MovieRow movie={movie} />
-        //     movieRows.push(movieRow)
-        // })
-
         // this.state = {rows: movieRows}
 
-        this.performSearch() 
+        // this.performSearch() 
     }
     
     componentDidMount = async () => {
@@ -32,14 +26,14 @@ class Dashboard extends Component {
     }
     
     performSearch = (searchTerm) => {
-        console.log('perform search')
+        // console.log('perform search')
         let API_KEY = process.env.REACT_APP_MOVIE_API_KEY;
         const urlString = `https://api.themoviedb.org/3/search/movie?api_key=`+API_KEY+"&query="+searchTerm
         $.ajax({
             url: urlString,
             success: (searchResults) => {
-                console.log("Fetched data successfully")
-                console.log(searchResults);
+                // console.log("Fetched data successfully")
+                // console.log(searchResults);
                 const results = searchResults.results
                 // console.log(results[0]);
 
@@ -126,7 +120,12 @@ class Dashboard extends Component {
                             margin: 5,
                             width: "75%"
                         }} type="text"/>
-                        {this.state.rows}
+                        <h3 style={{
+                            display: "block",
+                            paddingLeft: 120
+                        }}>
+                            {this.state.rows}
+                        </h3>
                     </div>
                     <h4>Share your thoughts.</h4>
                     <div>
@@ -140,7 +139,9 @@ class Dashboard extends Component {
                         }}  onChange={(e) => this.setState({blogInput: e.target.value})} type="text"/>
                     <button style={{
                             fontSize: 18,
-                            margin: 5
+                            margin: 5,
+                            display: "flex",
+                            flexWrap: "wrap"
                         }}  onClick={() => this.addPost()}>Submit</button>
                 </div>
                 <hr/>

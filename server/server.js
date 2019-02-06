@@ -3,7 +3,8 @@ const express = require('express');
 const session = require('express-session');
 const app = express();
 const massive = require('massive');
-const auth = require('./controller/auth_ctrl')
+const auth = require('./controller/auth_ctrl');
+const ctrl = require('./controller/ctrl');
 
 app.use(express.json());
 
@@ -23,28 +24,11 @@ massive(CONNECTION_STRING).then(db => {
 //Auth endpoints
 app.post('/auth/signup', auth.signup)
 app.post('/auth/login', auth.login)
-app.post('/auth/logout', async (req, res) => {
-    await req.session.destroy();
-    res.sendStatus(200);
-})
+app.post('/auth/logout', auth.logout)
 
 //Blog Post endpoints
-app.post('/api/addPost', async (req, res) => {
-    let db = req.app.get('db')
-    let user_id = req.session.user.id
-    let {post} = req.body
-    let posts = await db.create_post([user_id, post])
-    // console.log('37', posts);
-    res.status(200).send(posts);
-})
-
-app.get('/api/getPost', async (req, res) => {
-    let db = req.app.get('db')
-    let {post} = req.body
-    let allPosts = await db.get_post([post])
-    // console.log('45', allPosts)
-    res.status(200).send(allPosts)
-})
+app.post('/api/addPost', ctrl.addPost)
+app.get('/api/getPost', ctrl.getPost)
 
 app.delete('/api/deletePost/:id', async (req, res) => {
     let db = req.app.get('db');
