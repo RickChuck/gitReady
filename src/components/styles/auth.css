@@ -15,10 +15,10 @@ p {
 }
 button {
     margin: 5px;
-    border: none;
+    border: green solid 1px;
     display: inline-block;
-    background-color: rgba(0, 0, 0, 0.609);
-    color: white;
+    background-color: black;
+    color: green;
     font-size: 15px;
 }
 
