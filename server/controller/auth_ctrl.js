@@ -32,5 +32,10 @@ module.exports = {
         } else {
             return res.status(401).send('Incorrect username or password')
         }
+    },
+
+    logout: async (req, res) => {
+        await req.session.destroy();
+        res.sendStatus(200);
     }
 }
