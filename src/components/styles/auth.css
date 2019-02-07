@@ -2,7 +2,6 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    
 }
 p {
     display: flex;
@@ -14,11 +13,13 @@ p {
 }
 button {
     margin: 5px;
-    border: green solid 1px;
+    border: green solid 2px;
     display: inline-block;
     background-color: black;
     color: green;
     font-size: 15px;
+    font-weight: 500;
+    border-radius: 8px
 }
 
 input {

@@ -29,19 +29,7 @@ app.post('/auth/logout', auth.logout)
 //Blog Post endpoints
 app.post('/api/addPost', ctrl.addPost)
 app.get('/api/getPost', ctrl.getPost)
-
-app.delete('/api/deletePost/:id', async (req, res) => {
-    let db = req.app.get('db');
-    let {id} = req.params;
-    let removePost = await db.delete_post([id, req.session.user.id])
-    // console.log('53', removePost);
-    console.log('54', req.params);
-    try{
-        await res.status(200).send(removePost)
-    }catch(error){
-        console.log(error)
-    }
-})
+app.delete('/api/deletePost/:id', ctrl.deletePost)
 
 app.listen(SERVER_PORT, () => {
     console.log(`I hear it on: ${SERVER_PORT}`)
