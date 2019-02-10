@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import $ from 'jquery';
-import MovieRow from './MovieRow'
+// import PostPortal from '../PostPortal.js/PostPortal';
+import MovieRow from './MovieRow';
 require('dotenv').config();
 
 class Dashboard extends Component {
@@ -9,6 +10,7 @@ class Dashboard extends Component {
         super(props);
         this.state = {
             posts: [],
+            rows: [],
             blogInput: ''
         }
 
@@ -25,6 +27,7 @@ class Dashboard extends Component {
         })
     }
     
+
     performSearch = (searchTerm) => {
         // console.log('perform search')
         let API_KEY = process.env.REACT_APP_MOVIE_API_KEY;
@@ -47,9 +50,10 @@ class Dashboard extends Component {
                 })
 
                 this.setState({rows: movieRows})
+                // console.log("movieRows", movieRows)
             },
-            error: (xhr, status, err) => {
-                console.error("Failed to fetch data");
+            error: (err) => {
+                console.error("Failed to fetch data", err);
             }
         })
     }
@@ -82,8 +86,15 @@ class Dashboard extends Component {
         this.props.history.push('/')
     }
 
+    handleSubmit(e){
+        e.preventDefault();
+        e.target.reset();
+    }
+
+
     render(){    
         // console.log('this.state.posts', this.state.posts);
+        console.log('this.state.rows', this.state.rows);
         const blogDisplay = this.state.posts.map((el, i) => {
             // console.log("el", el);
             return (
@@ -112,17 +123,39 @@ class Dashboard extends Component {
                     </nav>
                 </div>
                 <div>
-                    <form className="post_inputs">
-                        <h3>Search movie posters by title.</h3>
-                        <input onChange={this.searchChangeHandler.bind(this)} style={{
-                            fontSize: 24,
-                            margin: 5,
-                            width: "75%"
-                        }} type="text"/>
+                    <form className="post_inputs" onSubmit={this.handleSubmit.bind(this)}>
+                    <h3>Search movie posters by title.</h3>
+                    <input onChange={this.searchChangeHandler.bind(this)} style={{
+                        fontSize: 24,
+                        margin: 5,
+                        width: "75%"
+                    }} type="text"/>
+                    <div style={{
+                        display: "inline-block",
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        width: '55%',
+                        height: 450,
+                        overflow: 'auto',
+                        border: '5px solid black',
+                        borderRadius: 10,
+                        margin: 5,
+                        scrollBehavior: "smooth",
+                    }}>
                         <h3 style={{
-                            display: "block",
-                            paddingLeft: 120
-                        }}>{this.state.rows}</h3>
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'start',
+                            margin: 10,
+                            marginLeft: 45,
+                            flexWrap: 'wrap',
+                            fontSize: 18,
+                        }}>
+                            {this.state.rows}
+                        </h3>
+                    </div>
+                    </form>
+                    <form onSubmit={this.handleSubmit.bind(this)}>
                         <h4>Share your thoughts.</h4>
                         <input style={{
                             fontSize: 24,

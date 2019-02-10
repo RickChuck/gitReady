@@ -35,11 +35,45 @@ class Auth extends Component {
             <div className='Auth'>
                 <div>
                     <ul>
-                        <p>
-                        Username: <input onChange={(e) => this.setState({user_name: e.target.value})} type="text"/>
-                        Password: <input onChange={(e) => this.setState({hash_value: e.target.value})} type="password"/>
-                        <button onClick={this.login}>Login</button>
-                        <button onClick={this.signup}>Sign Up</button>
+                        <p style={{
+                            color: 'white'
+                        }}>
+                        <p style={{
+                            margin: 0,
+                        }}>Username:</p><input style={{
+                            padding: 5,
+                            margin: 5
+                        }} onChange={(e) => this.setState({user_name: e.target.value})} type="text"/>
+                        <p style={{
+                            margin: 0
+                        }}>Password:</p><input style={{
+                            padding: 5,
+                            margin: 5
+                        }} onChange={(e) => this.setState({hash_value: e.target.value})} type="password"/>
+                        <div style={{
+                            margin: 5
+                        }}>
+                            <button style={{
+                                margin: 5,
+                                color: 'white',
+                                backgroundColor: 'green',
+                                border: 'none',
+                                padding: 5,
+                                fontSize: 20,
+                                fontWeight: 800,
+                                borderRadius: 7
+                            }} onClick={this.login}>Login</button>
+                            <button style={{
+                                margin: 5,
+                                color: 'white',
+                                backgroundColor: 'green',
+                                border: 'none',
+                                padding: 5,
+                                fontSize: 20,
+                                fontWeight: 800,
+                                borderRadius: 7
+                            }} onClick={this.signup}>Sign Up</button>
+                        </div>
                         </p>
                     </ul>
                 </div>
