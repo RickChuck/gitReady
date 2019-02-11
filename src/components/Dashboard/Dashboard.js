@@ -3,6 +3,11 @@ import axios from 'axios';
 import $ from 'jquery';
 // import PostPortal from '../PostPortal.js/PostPortal';
 import MovieRow from './MovieRow';
+import {
+    Button
+} from 'react-bootstrap';
+import '../styles/dashboard.css';
+
 require('dotenv').config();
 
 class Dashboard extends Component {
@@ -100,11 +105,11 @@ class Dashboard extends Component {
             return (
                 <div key={i}>
                     <div>
-                        <h3>User: {el.user_name}</h3>
+                        <h3>• {el.user_name}</h3>
                     </div>
                     <div>
                         <p>{el.post}</p>
-                        <button onClick={() => {this.handleDelete(el.post_id)}}>X</button>
+                        <Button onClick={() => {this.handleDelete(el.post_id)}}>X</Button>
                     </div>
                     <hr/>
                 </div>
@@ -119,10 +124,10 @@ class Dashboard extends Component {
                             padding: 30    
                         }}>
 
-                        <button onClick={this.logout}>Logout</button>
+                        <Button className='button-auth' onClick={this.logout}>Logout</Button>
                     </nav>
                 </div>
-                <div>
+                <div className='post-module'>
                     <form className="post_inputs" onSubmit={this.handleSubmit.bind(this)}>
                     <h3>Search movie posters by title.</h3>
                     <input onChange={this.searchChangeHandler.bind(this)} style={{
@@ -137,7 +142,7 @@ class Dashboard extends Component {
                         width: '55%',
                         height: 450,
                         overflow: 'auto',
-                        border: '5px solid black',
+                        border: '5px solid whiteSmoke',
                         borderRadius: 10,
                         margin: 5,
                         scrollBehavior: "smooth",
@@ -163,15 +168,9 @@ class Dashboard extends Component {
                             width: "75%",
                             height: 50
                         }}  onChange={(e) => this.setState({blogInput: e.target.value})} type="text"/>
-                        <button style={{
-                            fontSize: 18,
-                            margin: 5,
-                            display: "flex",
-                            flexWrap: "wrap"
-                        }}  onClick={() => this.addPost()}>Submit</button>
+                        <Button className='button-auth' onClick={() => this.addPost()}>Submit</Button>
                     </form>
                 </div>
-                <hr/>
                 <div>{blogDisplay}</div>
             </div>
         )

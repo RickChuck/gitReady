@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 class MovieRow extends React.Component {
 
@@ -16,7 +16,7 @@ class MovieRow extends React.Component {
         console.log(this.props.posts);
         
         console.log(this.props.movie);
-        let {poster} = this.props.movie.poster_src
+        // let {poster} = this.props.movie.poster_src
         // let res = axios.post('/api/addMovie', {
         //     this
         // })

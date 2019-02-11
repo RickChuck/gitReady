@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 // import {Link} from 'react-router-dom';
-import axios from 'axios';
 import '../styles/auth.css'
+import axios from 'axios';
+import {
+    Form,
+    Button,
+    Col,
+    Container,
+    Image
+} from 'react-bootstrap';
+import logo from '../styles/logo.png';
 
 class Auth extends Component {
     constructor(props) {
@@ -32,52 +40,37 @@ class Auth extends Component {
     render(){
         // console.log(this.state.loggedInUser);        
         return(
-            <div className='Auth'>
-                <div>
-                    <ul>
-                        <p style={{
-                            color: 'white'
-                        }}>
-                        <p style={{
-                            margin: 0,
-                        }}>Username:</p><input style={{
-                            padding: 5,
-                            margin: 5
-                        }} onChange={(e) => this.setState({user_name: e.target.value})} type="text"/>
-                        <p style={{
-                            margin: 0
-                        }}>Password:</p><input style={{
-                            padding: 5,
-                            margin: 5
-                        }} onChange={(e) => this.setState({hash_value: e.target.value})} type="password"/>
-                        <div style={{
+            <Container className='all-auth'>
+                <Image className='logo' src={logo} fluid/>
+                <Form className='Auth-form'>
+                    <h1 className='text-auth'>Login to get started</h1>
+                    <p className='text-auth'>• Or signup if it's your first time here.</p>
+                    <p className='border-line'></p>
+                    <Col>
+                        <Form.Group controlId="formGroupEmail" style={{
                             margin: 5
                         }}>
-                            <button style={{
-                                margin: 5,
-                                color: 'white',
-                                backgroundColor: 'green',
-                                border: 'none',
-                                padding: 5,
-                                fontSize: 20,
-                                fontWeight: 800,
-                                borderRadius: 7
-                            }} onClick={this.login}>Login</button>
-                            <button style={{
-                                margin: 5,
-                                color: 'white',
-                                backgroundColor: 'green',
-                                border: 'none',
-                                padding: 5,
-                                fontSize: 20,
-                                fontWeight: 800,
-                                borderRadius: 7
-                            }} onClick={this.signup}>Sign Up</button>
-                        </div>
-                        </p>
-                    </ul>
-                </div>
-            </div>
+                            <Form.Label className='username-auth' style={{
+                                margin: 5
+                            }}>Username</Form.Label>
+                            <Form.Control className='usernameInput' onChange={(e) => this.setState({user_name: e.target.value})} type="text" placeholder="Enter username" />
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label className='password-auth'>Password</Form.Label>
+                            <Form.Control className='passwordInput' onChange={(e) => this.setState({hash_value: e.target.value})} type="password" placeholder="Password"/>
+                        </Form.Group>
+                        <Form.Group style={{
+                            marginBottom: 5
+                        }}>
+                            <Button variant="outline-success" className="button-auth" onClick={this.login}>Login</Button>
+                            <Button className="button-auth" onClick={this.signup}>Sign Up</Button>      
+                        </Form.Group>
+                    </Col>
+                </Form>
+
+            </Container>
         )
     }
 }
