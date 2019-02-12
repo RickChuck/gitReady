@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Abel');
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans|Quicksand');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 .all-auth{
     display: flex;
@@ -7,7 +7,7 @@
 }
 
 .logo {
-   width: 70vw;
+   width: 45vw;
 }
 
 .Auth-form {
@@ -57,7 +57,7 @@
     font-size: 32px;
     position: static;
     width: auto;
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .border-line {

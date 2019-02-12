@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import $ from 'jquery';
+import Modal from 'react-responsive-modal';
 // import PostPortal from '../PostPortal.js/PostPortal';
 import MovieRow from './MovieRow';
 import {
@@ -16,12 +17,13 @@ class Dashboard extends Component {
         this.state = {
             posts: [],
             rows: [],
-            blogInput: ''
+            blogInput: '',
+            visable: false
         }
 
         // this.state = {rows: movieRows}
 
-        // this.performSearch() 
+        // this.performSearch()
     }
     
     componentDidMount = async () => {
@@ -77,6 +79,7 @@ class Dashboard extends Component {
         })
         // console.log('addPost res.data', res.data);
         this.setState({ posts: res.data })
+        this.closeModal();
     }
 
     handleDelete = async (id) => {
@@ -96,10 +99,21 @@ class Dashboard extends Component {
         e.target.reset();
     }
 
+    openModal = () => {
+        this.setState({
+            visable: true
+        });
+    }
+    closeModal = () => {
+        this.setState({
+            visable: false
+        })
+    }
+
 
     render(){    
         // console.log('this.state.posts', this.state.posts);
-        console.log('this.state.rows', this.state.rows);
+        // console.log('this.state.rows', this.state.rows);
         const blogDisplay = this.state.posts.map((el, i) => {
             // console.log("el", el);
             return (
@@ -117,6 +131,12 @@ class Dashboard extends Component {
         })
         return(
             <div className='Dashboard'>
+                {/* <Modal visable={true}
+                    width="400"
+                    height="300"
+                    >
+                    <p>hi</p>
+                </Modal> */}
                 <div>
                     <nav style={{
                             backgroundColor: "black",
@@ -127,50 +147,53 @@ class Dashboard extends Component {
                         <Button className='button-auth' onClick={this.logout}>Logout</Button>
                     </nav>
                 </div>
-                <div className='post-module'>
-                    <form className="post_inputs" onSubmit={this.handleSubmit.bind(this)}>
-                    <h3>Search movie posters by title.</h3>
-                    <input onChange={this.searchChangeHandler.bind(this)} style={{
-                        fontSize: 24,
-                        margin: 5,
-                        width: "75%"
-                    }} type="text"/>
-                    <div style={{
-                        display: "inline-block",
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        width: '55%',
-                        height: 450,
-                        overflow: 'auto',
-                        border: '5px solid whiteSmoke',
-                        borderRadius: 10,
-                        margin: 5,
-                        scrollBehavior: "smooth",
-                    }}>
-                        <h3 style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'start',
-                            margin: 10,
-                            marginLeft: 45,
-                            flexWrap: 'wrap',
-                            fontSize: 18,
-                        }}>
-                            {this.state.rows}
-                        </h3>
+                <section>
+                    <Button onClick={() => this.openModal()}>Make new post</Button>
+                    <div className='post-module'>
+                        <Modal open={this.state.visable} onClose={() => this.closeModal()}>
+                            <form className="modal" onSubmit={this.handleSubmit.bind(this)}>
+                                <h3>Search movie posters by title.</h3>
+                                <input onChange={this.searchChangeHandler.bind(this)} style={{
+                                    fontSize: 24,
+                                    margin: 5,
+                                    width: "75%"
+                                }} type="text"/>
+                                <div style={{
+                                    display: "inline-block",
+                                    alignItems: 'center',
+                                    textAlign: 'center',
+                                    width: '75%',
+                                    height: 350,
+                                    overflow: 'auto',
+                                    border: '5px solid whiteSmoke',
+                                    borderRadius: 10,
+                                    margin: 5,
+                                    scrollBehavior: "smooth",
+                                }}>
+                                <h3 style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'start',
+                                    margin: 10,
+                                    marginLeft: 45,
+                                    flexWrap: 'wrap',
+                                    fontSize: 18,
+                                }}>
+                                    {this.state.rows}
+                                </h3>
+                                </div>
+                                <h4>Share your thoughts.</h4>
+                                <input style={{
+                                    fontSize: 24,
+                                    margin: 5,
+                                    width: "75%",
+                                    height: 50
+                                }}  onChange={(e) => this.setState({blogInput: e.target.value})} type="text"/>
+                                <Button className='button-auth' onClick={() => this.addPost()}>Submit</Button>
+                            </form>
+                        </Modal>
                     </div>
-                    </form>
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h4>Share your thoughts.</h4>
-                        <input style={{
-                            fontSize: 24,
-                            margin: 5,
-                            width: "75%",
-                            height: 50
-                        }}  onChange={(e) => this.setState({blogInput: e.target.value})} type="text"/>
-                        <Button className='button-auth' onClick={() => this.addPost()}>Submit</Button>
-                    </form>
-                </div>
+                </section>
                 <div>{blogDisplay}</div>
             </div>
         )
