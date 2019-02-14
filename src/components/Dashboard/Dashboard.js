@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import $ from 'jquery';
-import MovieRow from './MovieRow'
+import Modal from 'react-responsive-modal';
+import {
+    Button,
+    Image
+} from 'react-bootstrap';
+import '../styles/dashboard.css';
+import logo from '../styles/logo.png'
+
 require('dotenv').config();
 
 class Dashboard extends Component {
@@ -9,12 +16,16 @@ class Dashboard extends Component {
         super(props);
         this.state = {
             posts: [],
-            blogInput: ''
+            rows: [],
+            blogInput: '',
+            visable: false
         }
 
-        // this.state = {rows: movieRows}
-
-        // this.performSearch() 
+        this.review = {
+            body: '',
+            author: {id: 0, user_name: ''},
+            movie: {poster_src: '', title: ''},
+        }
     }
     
     componentDidMount = async () => {
@@ -25,6 +36,7 @@ class Dashboard extends Component {
         })
     }
     
+
     performSearch = (searchTerm) => {
         // console.log('perform search')
         let API_KEY = process.env.REACT_APP_MOVIE_API_KEY;
@@ -42,18 +54,32 @@ class Dashboard extends Component {
                 results.forEach((movie) => {
                     movie.poster_src = "https://image.tmdb.org/t/p/w185"+movie.poster_path
                     // console.log(movie.poster_path);
-                    const movieRow = <MovieRow key={movie.id} movie={movie}/>
+                    const movieRow = <table key={movie.id}>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img onClick={() => this.handleMovie(movie)} src={movie.poster_src} className='search-results' alt="poster" width="150" tabIndex="0"/>
+                            </td>
+                            <td>
+                                <h3>
+                                    {movie.title}
+                                </h3> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>    
                     movieRows.push(movieRow)
                 })
 
                 this.setState({rows: movieRows})
+                // console.log("movieRows", movieRows)
             },
-            error: (xhr, status, err) => {
-                console.error("Failed to fetch data");
+            error: (err) => {
+                console.error("Failed to fetch data", err);
             }
         })
     }
-    
+   
     searchChangeHandler = (event) => {
         const boundObject = this
         const searchTerm = event.target.value
@@ -61,13 +87,23 @@ class Dashboard extends Component {
         boundObject.performSearch(searchTerm)
     }
 
+    handleMovie = (selectedMovie) => {
+        // console.log(selectedMovie);
+        this.review.movie = {title: selectedMovie.title, poster_src: selectedMovie.poster_src};
+    }
+
     addPost = async () => {
         let {blogInput} = this.state
+        // console.log(blogInput);
+        this.review.body = blogInput;
+        // console.log(this.review);
+        
         let res = await axios.post(`/api/addPost`, {
-            post: blogInput
+            post: this.review
         })
         // console.log('addPost res.data', res.data);
         this.setState({ posts: res.data })
+        this.closeModal();
     }
 
     handleDelete = async (id) => {
@@ -82,64 +118,98 @@ class Dashboard extends Component {
         this.props.history.push('/')
     }
 
+    handleSubmit(e){
+        e.preventDefault();
+        e.target.reset();
+    }
+
+    openModal = () => {
+        this.setState({
+            visable: true
+        });
+    }
+    closeModal = () => {
+        this.setState({
+            visable: false
+        })
+    }
+
+
     render(){    
         // console.log('this.state.posts', this.state.posts);
+        // console.log('this.state.rows', this.state.rows);
         const blogDisplay = this.state.posts.map((el, i) => {
             // console.log("el", el);
             return (
                 <div key={i}>
                     <div>
-                        <h3>User: {el.user_name}</h3>
+                        <h3 className='username-dash'>• {el.user_name}</h3>
                     </div>
-                    <div>
-                        <p>{el.post}</p>
-                        <button onClick={() => {this.handleDelete(el.post_id)}}>X</button>
+                    <div className='post-body'>
+                        <div className='post-container'>
+                            <img src={el.movie_poster} className='poster-img' alt="movie poster"/>
+                            <p className='post-dash'>{el.post}</p>
+                        </div>
+                        <Button className='delete-btn' onClick={() => {this.handleDelete(el.post_id)}}>X</Button>
                     </div>
-                    <hr/>
                 </div>
             )
         })
         return(
             <div className='Dashboard'>
                 <div>
-                    <nav style={{
-                            backgroundColor: "black",
-                            display: "block",
-                            padding: 30    
-                        }}>
-
-                        <button onClick={this.logout}>Logout</button>
+                    <nav className='navBar'>
+                        <Image src={logo} alt="movieDot" className='logo-dash'/>
+                        <Button className='logout-dash' onClick={this.logout}>Logout</Button>
                     </nav>
                 </div>
-                <div>
-                    <form className="post_inputs">
-                        <h3>Search movie posters by title.</h3>
-                        <input onChange={this.searchChangeHandler.bind(this)} style={{
-                            fontSize: 24,
-                            margin: 5,
-                            width: "75%"
-                        }} type="text"/>
-                        <h3 style={{
-                            display: "block",
-                            paddingLeft: 120
-                        }}>{this.state.rows}</h3>
-                        <h4>Share your thoughts.</h4>
-                        <input style={{
-                            fontSize: 24,
-                            margin: 5,
-                            width: "75%",
-                            height: 50
-                        }}  onChange={(e) => this.setState({blogInput: e.target.value})} type="text"/>
-                        <button style={{
-                            fontSize: 18,
-                            margin: 5,
-                            display: "flex",
-                            flexWrap: "wrap"
-                        }}  onClick={() => this.addPost()}>Submit</button>
-                    </form>
-                </div>
-                <hr/>
-                <div>{blogDisplay}</div>
+                <section>
+                    <Button className='makePost-btn' onClick={() => this.openModal()}>Make new post</Button>
+                    <div className='post-module'>
+                        <Modal open={this.state.visable} onClose={() => this.closeModal()}>
+                            <form className="modal" onSubmit={this.handleSubmit.bind(this)}>
+                                <h3>Search movie posters by title.</h3>
+                                <input onChange={this.searchChangeHandler.bind(this)} style={{
+                                    fontSize: 24,
+                                    margin: 5,
+                                    width: "75%",
+                                    borderRadius: 4,
+                                    backgroundColor: 'whiteSmoke'
+                                }} type="text"/>
+                                <div style={{
+                                    display: "inline-block",
+                                    alignItems: 'center',
+                                    textAlign: 'center',
+                                    width: 500,
+                                    height: 350,
+                                    overflow: 'auto',
+                                    border: '5px solid black',
+                                    borderRadius: 10,
+                                    margin: 5,
+                                    scrollBehavior: "smooth",
+                                    }}>
+                                    <h3 style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'start',
+                                        margin: 10,
+                                        marginLeft: 45,
+                                        flexWrap: 'wrap',
+                                        fontSize: 18,
+                                    }}>
+                                        {this.state.rows}
+                                    </h3>
+                                </div>
+                                <h4>Share your thoughts.</h4>
+                                <div className='thoughts-input-containter'>
+                                    <textarea className='postInput' onChange={(e) => this.setState({blogInput: e.target.value})} type="text"/>
+                                    <Button className='button-auth' onClick={() => this.addPost()}>Submit</Button>
+                                </div>
+                            </form>
+                        </Modal>
+                    </div>
+                </section>
+                <div className='blogDisplay'>{blogDisplay}</div>
             </div>
         )
     }

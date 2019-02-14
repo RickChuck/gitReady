@@ -4,7 +4,7 @@ module.exports = {
         let user_id = req.session.user.id
         let {post} = req.body
         try{
-            let posts = await db.create_post([user_id, post])
+            let posts = await db.create_post([user_id, post.body, post.movie.title, post.movie.poster_src])
             res.status(200).send(posts);
         } catch(error){
             console.log('Cannot add post', error);
@@ -33,7 +33,7 @@ module.exports = {
         // console.log('54', req);
         try{
             await res.status(200).send(removePost)
-        }catch(error){
+        } catch(error){
             console.log('Cannot delete post', error)
         }
     }
