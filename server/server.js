@@ -31,15 +31,6 @@ app.post('/api/addPost', ctrl.addPost)
 app.get('/api/getPost', ctrl.getPost)
 app.delete('/api/deletePost/:id', ctrl.deletePost)
 
-app.post('/api/addPoster', async (req, res) => {
-    let db = req.app.get('db');
-    try {
-    
-    }catch(error) {
-        console.log('Cannot add Poster', error);
-    }
-})
-
 app.listen(SERVER_PORT, () => {
     console.log(`I hear it on: ${SERVER_PORT}`)
 })
