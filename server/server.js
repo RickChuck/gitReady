@@ -31,6 +31,8 @@ app.post('/api/addPost', ctrl.addPost)
 app.get('/api/getPost', ctrl.getPost)
 app.delete('/api/deletePost/:id', ctrl.deletePost)
 
+app.use( express.static( `${__dirname}/../build` ) );
+
 app.listen(SERVER_PORT, () => {
     console.log(`I hear it on: ${SERVER_PORT}`)
 })
