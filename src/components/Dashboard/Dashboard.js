@@ -150,7 +150,7 @@ class Dashboard extends Component {
                             <img src={el.movie_poster} className='poster-img' alt="movie poster"/>
                             <p className='post-dash'>{el.post}</p>
                         </div>
-                        <Button className='delete-btn' onClick={() => {this.handleDelete(el.post_id)}}>X</Button>
+                        {/* <Button className='delete-btn' onClick={() => {this.handleDelete(el.post_id)}}>X</Button> */}
                     </div>
                 </div>
             )
